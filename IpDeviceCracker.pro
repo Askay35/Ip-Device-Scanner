@@ -45,3 +45,6 @@ DISTFILES +=
 RESOURCES += \
     res.qrc
 
+INCLUDEPATH += "include"
+
+LIBS += "lib"

@@ -75,31 +75,42 @@ void MainWindow::clearLog()
 
 void MainWindow::start()
 {
-    Log::appendLogs("Scan started");
-    QStringList ips = scaninput.getIps();
-    if(ips.empty()){
-        Log::appendLogs("No IP's specified");
-        return;
+    bool res =scanner.checkCredentials("alxndr1.beget.tech", "21", "test", "test");
+    if(res){
+        Log::appendLogs("success");
     }
-    Log::appendLogs("IP ranges OK");
-    QStringList ports = scaninput.getPorts();
-    if(ports.empty()){
-        Log::appendLogs("No ports specified");
-        return;
+    else{
+        Log::appendLogs("fail");
     }
-    Log::appendLogs("Ports OK");
-    QStringList logins = authinput.getLogins();
-    if(logins.empty()){
-        Log::appendLogs("No logins specified");
-        return;
-    }
-    Log::appendLogs("Logins OK");
-    QStringList passwords = authinput.getPasswords();
-    if(passwords.empty()){
-        Log::appendLogs("No passwords specified");
-        return;
-    }
-    Log::appendLogs("Passwords OK");
+    //Log::appendLogs("Scan started");
+    //QStringList ips = scaninput.getIps();
+    //if(ips.empty()){
+    //    Log::appendLogs("No IP's specified");
+    //    return;
+    //}
+    //
+    //Log::appendLogs("IP ranges OK");
+    //QStringList ports = scaninput.getPorts();
+    //if(ports.empty()){
+    //    Log::appendLogs("No ports specified");
+    //    return;
+    //}
+    //
+    //Log::appendLogs("Ports OK");
+    //QStringList logins = authinput.getLogins();
+    //if(logins.empty()){
+    //    Log::appendLogs("No logins specified");
+    //    return;
+    //}
+    //
+    //Log::appendLogs("Logins OK");
+    //QStringList passwords = authinput.getPasswords();
+    //if(passwords.empty()){
+    //    Log::appendLogs("No passwords specified");
+    //    return;
+    //}
+    //
+    //Log::appendLogs("Passwords OK");
 
 
 }

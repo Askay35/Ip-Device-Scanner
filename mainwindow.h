@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "port.h"
+#include "scanner.h"
 #include "scaninput.h"
 #include "authinput.h"
 #include "table.h"
@@ -20,6 +21,7 @@ public:
     ~MainWindow();
 
 private:
+    Scanner scanner;
     Table table;
     AuthInput authinput;
     ScanInput scaninput;
