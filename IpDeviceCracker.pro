@@ -22,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     authinput.h \
+    device.h \
     ipaddress.h \
     log.h \
     mainwindow.h \
@@ -40,11 +41,16 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES +=
+# DISTFILES +=
+
+DEFINES += "CURL_STATICLIB"
 
 RESOURCES += \
     res.qrc
 
-INCLUDEPATH += "include"
+INCLUDEPATH += $$PWD/include
 
-LIBS += "lib"
+LIBS += -lAdvapi32 -lNormaliz
+
+
+LIBS += -L$$PWD/lib -lwinmm -lws2_32 -lwldap32 -llibcurl_a -lcrypt32

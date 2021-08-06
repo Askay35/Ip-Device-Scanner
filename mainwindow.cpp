@@ -7,7 +7,6 @@
 #include <QFileDialog>
 
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -21,6 +20,12 @@ MainWindow::MainWindow(QWidget *parent)
     this->scaninput.ports_input= ui->portsInput;
 
     this->table.table = ui->resultTable;
+
+    this->scanner.max_threads_sb = ui->maxThreadsInput;
+    this->scanner.timeout_sb = ui->timeoutInput;
+    this->scanner.table = &table;
+    this->scanner.start_btn = ui->startBtn;
+
 
     connect(ui->startBtn, SIGNAL(clicked()), SLOT(start()));
 
@@ -40,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->exportLogBtn, SIGNAL(clicked()), SLOT(exportLog()));
     connect(ui->exportResultsBtn, SIGNAL(clicked()), SLOT(exportResults()));
 
+
+    connect(&this->scanner, SIGNAL(sendRow(IPDevice)), &this->table, SLOT(addRow(IPDevice)));
 
     //alxndr1_test
     //Test_123
@@ -62,6 +69,40 @@ MainWindow::~MainWindow()
 }
 
 
+void MainWindow::startScan()
+{
+    Log::appendLogs("Scan started");
+    QStringList ips = scaninput.getIps();
+    if(ips.empty()){
+        Log::appendLogs("No IP's specified");
+        return;
+    }
+    Log::appendLogs("IP ranges OK");
+
+    QStringList ports = scaninput.getPorts();
+    if(ports.empty()){
+        Log::appendLogs("No ports specified");
+        return;
+    }
+    Log::appendLogs("Ports OK");
+
+    QStringList logins = authinput.getLogins();
+    if(logins.empty()){
+        Log::appendLogs("No logins specified");
+        return;
+    }
+    Log::appendLogs("Logins OK");
+
+    QStringList passwords = authinput.getPasswords();
+    if(passwords.length()<2){
+        Log::appendLogs("No passwords specified");
+        return;
+    }
+    Log::appendLogs("Passwords OK");
+
+    scanner.scan(ips, ports, logins, passwords);
+}
+
 void MainWindow::clearResults()
 {
     ui->resultTable->setRowCount(0);
@@ -75,50 +116,13 @@ void MainWindow::clearLog()
 
 void MainWindow::start()
 {
-    bool res =scanner.checkCredentials("alxndr1.beget.tech", "21", "test", "test");
-    if(res){
-        Log::appendLogs("success");
-    }
-    else{
-        Log::appendLogs("fail");
-    }
-    //Log::appendLogs("Scan started");
-    //QStringList ips = scaninput.getIps();
-    //if(ips.empty()){
-    //    Log::appendLogs("No IP's specified");
-    //    return;
-    //}
-    //
-    //Log::appendLogs("IP ranges OK");
-    //QStringList ports = scaninput.getPorts();
-    //if(ports.empty()){
-    //    Log::appendLogs("No ports specified");
-    //    return;
-    //}
-    //
-    //Log::appendLogs("Ports OK");
-    //QStringList logins = authinput.getLogins();
-    //if(logins.empty()){
-    //    Log::appendLogs("No logins specified");
-    //    return;
-    //}
-    //
-    //Log::appendLogs("Logins OK");
-    //QStringList passwords = authinput.getPasswords();
-    //if(passwords.empty()){
-    //    Log::appendLogs("No passwords specified");
-    //    return;
-    //}
-    //
-    //Log::appendLogs("Passwords OK");
-
-
+    std::thread scanthread(&MainWindow::startScan, this);
+    scanthread.join();
 }
+
 
 void MainWindow::exportResults()
 {
-    table.addRow("ip","port","time", "auth", "sname", "bssid");
-    Log::appendLogs("Results exported");
 }
 
 void MainWindow::exportLog()

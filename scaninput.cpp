@@ -69,7 +69,7 @@ QStringList ScanInput::getPorts()
 {
     QStringList ports;
     QString portstext = this->ports_input->toPlainText();
-    if(portstext.length()>0){
+    if(portstext.length()<1){
         return ports;
     }
     QStringList splited = portstext.split("\n");
@@ -86,8 +86,8 @@ QStringList ScanInput::getIps()
 {
     QStringList ips;
     QStringList ipranges = ips_input->toPlainText().split("\n");
-    ProgressBar::pb->reset();
-    ProgressBar::pb->setMaximum(ipranges.length());
+    //ProgressBar::pb->reset();
+    //ProgressBar::pb->setMaximum(ipranges.length());
     for (int i = 0; i < ipranges.length(); i++) {
         if(ScanInput::isIp(ipranges[i])){
             ips.append(ipranges[i]);
@@ -107,7 +107,7 @@ QStringList ScanInput::getIps()
                 ips.append(ScanInput::parseDiap(iprange[0], stopip));
             }
         }
-        ProgressBar::pb->setValue(ProgressBar::pb->value()+1);
+      //  ProgressBar::pb->setValue(ProgressBar::pb->value()+1);
     }
     return  ips;
 }

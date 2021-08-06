@@ -39,11 +39,18 @@
     <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QHeaderView::section
-{
+   <string notr="true">QHeaderView::section{
     background-color: rgb(240, 240, 240);
 	border: 1px solid rgb(210, 210, 210);
     color: #000;
+
+}
+
+QScrollBar::horizontal{
+	height: 15px;
+}
+QScrollBar::vertical{
+	width: 15px;
 }
 
 QSpinBox::up-button,QSpinBox::down-button{
@@ -110,7 +117,7 @@ QGroupBox{
    <widget class="QPushButton" name="startBtn">
     <property name="geometry">
      <rect>
-      <x>15</x>
+      <x>13</x>
       <y>10</y>
       <width>100</width>
       <height>100</height>
@@ -285,16 +292,6 @@ QGroupBox{
         <string>Authorization</string>
        </property>
       </column>
-      <column>
-       <property name="text">
-        <string>Server name </string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>BSSID</string>
-       </property>
-      </column>
      </widget>
      <widget class="QFrame" name="frame_2">
       <property name="geometry">
@@ -435,6 +432,9 @@ QGroupBox{
        <height>99</height>
       </rect>
      </property>
+     <property name="lineWrapMode">
+      <enum>QPlainTextEdit::NoWrap</enum>
+     </property>
      <property name="plainText">
       <string/>
      </property>
@@ -460,6 +460,9 @@ QGroupBox{
        <width>118</width>
        <height>99</height>
       </rect>
+     </property>
+     <property name="lineWrapMode">
+      <enum>QPlainTextEdit::NoWrap</enum>
      </property>
      <property name="plainText">
       <string/>
@@ -532,8 +535,17 @@ QGroupBox{
        <height>22</height>
       </rect>
      </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
      <property name="maximum">
       <number>60000</number>
+     </property>
+     <property name="singleStep">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>20000</number>
      </property>
     </widget>
     <widget class="QSpinBox" name="maxThreadsInput">
@@ -544,6 +556,9 @@ QGroupBox{
        <width>91</width>
        <height>22</height>
       </rect>
+     </property>
+     <property name="minimum">
+      <number>1</number>
      </property>
      <property name="maximum">
       <number>500</number>
@@ -586,6 +601,9 @@ QGroupBox{
        <width>85</width>
        <height>99</height>
       </rect>
+     </property>
+     <property name="lineWrapMode">
+      <enum>QPlainTextEdit::NoWrap</enum>
      </property>
      <property name="plainText">
       <string/>
@@ -670,6 +688,9 @@ QGroupBox{
        <width>170</width>
        <height>99</height>
       </rect>
+     </property>
+     <property name="lineWrapMode">
+      <enum>QPlainTextEdit::NoWrap</enum>
      </property>
     </widget>
     <widget class="QPushButton" name="addPortsBtn">

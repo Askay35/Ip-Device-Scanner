@@ -1,6 +1,7 @@
 #ifndef TABLE_H
 #define TABLE_H
 
+#include "device.h"
 #include <QTableWidget>
 
 class Table : public QObject
@@ -11,7 +12,8 @@ public:
 
     QTableWidget *table;
 
-    void addRow(QString ip="", QString port="", QString time="", QString auth="", QString server_name="", QString bssid="");
+public slots:
+    void addRow(IPDevice device);
 
 };
 

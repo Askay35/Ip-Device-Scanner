@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "device.h"
 #include <QMainWindow>
 #include "port.h"
 #include "scanner.h"
@@ -26,12 +27,18 @@ private:
     AuthInput authinput;
     ScanInput scaninput;
 
+private:
+    void startScan();
+
 private slots:
+
     void clearResults();
     void clearLog();
 
+
     void exportLog();
     void exportResults();
+
 
     void start();
 
