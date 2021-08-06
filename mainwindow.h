@@ -28,9 +28,18 @@ private:
     ScanInput scaninput;
 
 private:
-    void startScan();
+    bool state;
+
+private:
+    void start();
+    void stop();
+
+private:
+    std::thread scan_thread;
 
 private slots:
+
+    void stateChanged(bool work);
 
     void clearResults();
     void clearLog();
@@ -40,7 +49,7 @@ private slots:
     void exportResults();
 
 
-    void start();
+    void startClick();
 
 private:
     Ui::MainWindow *ui;

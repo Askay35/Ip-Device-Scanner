@@ -134,7 +134,7 @@ QGroupBox{
      <string notr="true"/>
     </property>
     <property name="text">
-     <string>Start</string>
+     <string>START</string>
     </property>
     <property name="flat">
      <bool>false</bool>

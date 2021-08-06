@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    this->state = true;
+
     this->authinput.logins_input = ui->loginsInput;
     this->authinput.passwords_input = ui->passwordsInput;
 
@@ -21,13 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->table.table = ui->resultTable;
 
-    this->scanner.max_threads_sb = ui->maxThreadsInput;
-    this->scanner.timeout_sb = ui->timeoutInput;
-    this->scanner.table = &table;
-    this->scanner.start_btn = ui->startBtn;
-
-
-    connect(ui->startBtn, SIGNAL(clicked()), SLOT(start()));
+    connect(ui->startBtn, SIGNAL(clicked()), SLOT(startClick()));
 
     connect(ui->addLoginsBtn, SIGNAL(clicked()), &authinput, SLOT(addLogins()));
     connect(ui->addIpsBtn, SIGNAL(clicked()),&scaninput, SLOT(addIps()));
@@ -47,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     connect(&this->scanner, SIGNAL(sendRow(IPDevice)), &this->table, SLOT(addRow(IPDevice)));
+    connect(&this->scanner, SIGNAL(changeState(bool)), SLOT(stateChanged(bool)));
+
 
     //alxndr1_test
     //Test_123
@@ -68,10 +66,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-void MainWindow::startScan()
+void MainWindow::stateChanged(bool work)
 {
-    Log::appendLogs("Scan started");
+    this->state = work;
+    if(state){
+        ui->startBtn->setText("START");
+    }
+    else{
+        ui->startBtn->setText("STOP");
+    }
+}
+
+
+void MainWindow::start()
+{
     QStringList ips = scaninput.getIps();
     if(ips.empty()){
         Log::appendLogs("No IP's specified");
@@ -100,7 +108,15 @@ void MainWindow::startScan()
     }
     Log::appendLogs("Passwords OK");
 
-    scanner.scan(ips, ports, logins, passwords);
+
+    Log::appendLogs("Scan started");
+    this->scan_thread(&Scanner::scan, &this->scanner,ips, ports, logins, passwords, ui->maxThreadsInput->value(), ui->timeoutInput->value());
+    this->scan_thread.detach();
+}
+
+void MainWindow::stop()
+{
+
 }
 
 void MainWindow::clearResults()
@@ -114,15 +130,19 @@ void MainWindow::clearLog()
     ui->logField->clear();
 }
 
-void MainWindow::start()
-{
-    std::thread scanthread(&MainWindow::startScan, this);
-    scanthread.join();
-}
-
 
 void MainWindow::exportResults()
 {
+}
+
+void MainWindow::startClick()
+{
+    if(state){
+        start();
+    }
+    else{
+        stop();
+    }
 }
 
 void MainWindow::exportLog()

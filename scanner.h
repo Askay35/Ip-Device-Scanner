@@ -34,6 +34,8 @@ public:
 
 signals:
 
+    void changeState(bool state);
+
     void sendRow(IPDevice device);
 
 };

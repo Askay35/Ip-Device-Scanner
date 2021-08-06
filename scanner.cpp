@@ -1,6 +1,7 @@
 #include "scanner.h"
 #include "log.h"
 #include <vector>
+#include <QDebug>
 
 bool Scanner::defaultCheckCredentials(QString ip, QString port, QString login, QString password, int timeout)
 {
@@ -28,10 +29,10 @@ bool Scanner::defaultCheckCredentials(QString ip, QString port, QString login, Q
             emit sendRow(device);
         }
 
-        curl_easy_cleanup(curl);
+        //curl_easy_cleanup(curl);
         return true;
     }
-    curl_easy_cleanup(curl);
+    //curl_easy_cleanup(curl);
     return false;
 }
 
@@ -60,11 +61,11 @@ bool Scanner::ftpCheckCredentials(QString ip, QString login, QString password, i
             emit sendRow(device);
         }
 
-        curl_easy_cleanup(curl);
+        //curl_easy_cleanup(curl);
         return true;
     }
 
-    curl_easy_cleanup(curl);
+    //curl_easy_cleanup(curl);
     return false;
 }
 
@@ -101,23 +102,25 @@ bool Scanner::checkCredentials(QString ip, QString port, QString login, QString 
 
 void Scanner::scan(QStringList ips, QStringList ports, QStringList logins, QStringList passwords,int max_threads, int timeout)
 {
-    std::vector<std::thread> threads;
-
-    for (QString &ip : ips) {
-        for (QString &port : ports) {
-            for (QString &login : logins) {
-                for (QString &password : passwords) {
-                    if(threads.size()<max_threads){
-                        threads.push_back(std::thread(&Scanner::checkCredentials, this, ip, port, login, password, timeout));
-                    }
-                    else{
-                        for(std::thread &t : threads){
-                            t.join();
+    emit changeState(false);
+    for (QString ip : ips) {
+        for (QString port : ports) {
+            for (QString login : logins) {
+                for (QString password : passwords) {
+                    try {
+                        if(!checkCredentials(ip, port, login,password, timeout)){
+                            qDebug()<<"FAIL: "<< ip << port<< login <<password;
                         }
-                        threads.clear();
+                        else{
+                            qDebug()<<"SUCCESS: "<< ip << port<< login <<password;
+                        }
+
+                    }  catch (const std::string& ex) {
+                        qDebug()<<QString(ex.c_str());
                     }
                 }
             }
         }
     }
+    emit changeState(true);
 }
